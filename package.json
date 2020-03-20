@@ -1,0 +1,23 @@
+{
+  "name": "otic-ui",
+  "version": "1.0.0",
+  "description": "User interface HTML + CSS for Ohio Turnpike E-Z Pass through Protek IT Services",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@git.digitalware.com:10022/protek/otic-ui.git"
+  },
+  "author": "Lucas M. Shepherd",
+  "license": "ISC",
+  "devDependencies": {
+    "browser-sync": "^2.26.7",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^7.0.1",
+    "gulp-newer": "^1.4.0",
+    "gulp-sass": "^4.0.2"
+  },
+  "dependencies": {}
+}

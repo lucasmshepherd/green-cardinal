@@ -1,0 +1,48 @@
+// **** typography ****
+// type
+// stack
+
+$fontTypes: nest-get($fether, type);
+
+@mixin type($input) {
+  $style: 1;
+  $type: "body";
+  $flow: nest-get($fontTypes, flow);
+  @each $item in $input {
+    @if is-number($item) {
+      $style: $item;
+    } @else {
+      $type: $item;
+    }
+  }
+
+  @if not nest-has-key($fontTypes, $type $style) {
+    $style: 1;
+  }
+
+  @if $type == "html" {
+    font-size: nest-get($fontTypes, html);
+  } @else {
+    font-size: its(nest-get($fontTypes, $type $style size));
+    font-weight: nest-get($fontTypes, $type $style weight);
+    line-height: its(nest-get($fontTypes, $type $style leading));
+    $tracking: nest-get($fontTypes, $type $style tracking);
+    @if $tracking != 0 {
+      letter-spacing: its($tracking);
+    }
+    @if $type == "body" {
+      @if $flow == "rtl" {
+        text-align: right;
+      } @else {
+        text-align: left;
+      }
+    }
+  }
+}
+
+@function stack($input: 1) {
+  @return nest-get($setTypography, font stack $input);
+}
+@mixin stack($input: 1) {
+  font-family: nest-get($setTypography, font stack $input);
+}

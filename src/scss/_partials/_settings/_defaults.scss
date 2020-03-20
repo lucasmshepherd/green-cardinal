@@ -1,0 +1,128 @@
+// initiate
+$fether: () !default;
+
+// layout
+$default_units: px !default;
+//
+$body_width: 100% !default;
+$body_align: null !default;
+//
+$page_width: 1400 !default;
+$page_align: center !default;
+//
+$wrap_width: $page_width !default;
+$wrap_align: $page_align !default;
+//
+$column_xs: 4 !default;
+$column_sm: 4 !default;
+$column_md: 8 !default;
+$column_lg: 12 !default;
+$column_xl: 12 !default;
+//
+$break_0: 0 !default;
+$break_1: 320 !default;
+$break_2: 480 !default;
+$break_3: 600 !default;
+$break_4: 840 !default;
+$break_5: 1008 !default;
+$break_6: 1264 !default;
+$break_7: 1424 !default;
+$break_8: 1800 !default;
+
+// colors
+$theme_light: #fff !default;
+$theme_dark: #000 !default;
+//
+// $filter_color_mix is only used if $filter_color is set
+// $filter_color will be mixed with every cast() color by the mix amount specified
+$filter_color: null !default;
+$filter_color_mix: 50% !default;
+//
+// tint/shade filters are used for cast() color weights above/below 500
+$filter_tint_color: #fff !default;
+$filter_shade_color: #000 !default;
+//
+// opacity styles
+$opacity_default: 100% !default;
+$opacity_disabled: 44% !default;
+$opacity_divider: 12% !default;
+$opacity_hint: 44% !default;
+$opacity_inactive: 28% !default;
+$opacity_secondary: 62% !default;
+//
+$opacity_dark_default: 87% !default;
+$opacity_dark_disabled: 38% !default;
+$opacity_dark_divider: 12% !default;
+$opacity_dark_hint: 38% !default;
+$opacity_dark_inactive: 26% !default;
+$opacity_dark_secondary: 54% !default;
+//
+$opacity_light_default: 100% !default;
+$opacity_light_disabled: 50% !default;
+$opacity_light_divider: 12% !default;
+$opacity_light_hint: 50% !default;
+$opacity_light_inactive: 30% !default;
+$opacity_light_secondary: 70% !default;
+
+// typography
+$html_font_size: 62.5%;
+//
+$body_font_size: 14;
+$body_line_height: 20;
+$body_letter_spacing: 0;
+$body_font_weight: normal;
+//
+$caption_font_size: 12;
+$caption_line_height: 14;
+$caption_letter_spacing: 0.25;
+$caption_font_weight: normal;
+//
+$subheading_font_size: 16;
+$subheading_line_height: 24;
+$subheading_letter_spacing: 0;
+$subheading_font_weight: normal;
+//
+$title_1_font_size: 20;
+$title_1_line_height: 30;
+$title_1_letter_spacing: 0;
+$title_1_font_weight: 500;
+//
+$title_2_font_size: 24;
+$title_2_line_height: 32;
+$title_2_letter_spacing: 0;
+$title_2_font_weight: normal;
+//
+$title_3_font_size: 34;
+$title_3_line_height: 40;
+$title_3_letter_spacing: -0.5;
+$title_3_font_weight: normal;
+//
+$title_4_font_size: 45;
+$title_4_line_height: 48;
+$title_4_letter_spacing: -1;
+$title_4_font_weight: normal;
+//
+$title_5_font_size: 56;
+$title_5_line_height: 56;
+$title_5_letter_spacing: -1.6;
+$title_5_font_weight: normal;
+//
+$title_6_font_size: 112;
+$title_6_line_height: 112;
+$title_6_letter_spacing: -4.5;
+$title_6_font_weight: 300;
+//
+// script
+// english: Latin, Greek, Cyrillic
+// dense: Chinese, Japanese, Korean
+// tall: South/SE Asian, Middle Eastern
+$type_script: english;
+$type_flow: ltr;
+//
+// $rem_base is a hidden font size -ONLY- for calculating rem/em values with its()
+$rem_base: 14 !default;
+//
+// fonts
+$font_stack_1: "Poppins", sans-serif;
+$font_stack_2: null;
+$font_stack_3: null;

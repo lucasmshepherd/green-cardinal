@@ -1,0 +1,358 @@
+// **** frame ****
+// wrap
+// break
+// show
+// hide
+
+$frames: nest-get($fether, layout container);
+$bps: nest-get($fether, breakpoint);
+$bpSizes: map-keys($bps);
+
+@mixin wrap($input: null) {
+  $frame: null;
+
+  @each $item in $input {
+    @if $item == body or $item == page {
+      $frame: $item;
+    }
+  }
+  @if not $frame {
+    $frame: wrap;
+  }
+
+  @if $frame != body {
+    display: block;
+    width: 100%;
+  }
+
+  $width: nest-get($frames, $frame width);
+  $align: nest-get($frames, $frame alignment);
+
+  @each $item in $input {
+    @if is-number($item) {
+      $width: $item;
+    } @else if is-position($item) {
+      $align: $item;
+    }
+  }
+
+  @if not is-percent($width) {
+    $width: its($width);
+  }
+
+  @if $width != 100% {
+    max-width: $width;
+    @if $align == right {
+      margin-left: auto;
+    } @else if $align == center or $align == middle {
+      margin-left: auto;
+      margin-right: auto;
+    } @else if $align == left {
+      margin-right: auto;
+    }
+  }
+}
+
+@function break($input) {
+  $output: ();
+  $range: "min";
+  $dim: "width";
+  $break: null;
+  $orientation: null;
+  $view: null;
+  @each $item in $input {
+    @if $item == "max" {
+      $range: $item;
+    } @else if $item == "height" {
+      $dim: $item;
+    } @else if is-number($item) {
+      @if unitless($item) {
+        $break: its($item);
+      } @else {
+        $break: $item;
+      }
+    } @else if has-item($bpSizes, $item) {
+      $break: nest-get($bps, $item);
+    } @else if $item == "landscape" or $item == "portrait" {
+      $orientation: $item;
+    } @else if $item == "screen" or $item == "print" or $item == "speech" {
+      $view: $item;
+    } @else if $item == "all" {
+      $view: $item;
+    } @else if $item == "retina" {
+      @return "screen and (-webkit-min-device-pixel-ratio: 2)",
+        "screen and (min--moz-device-pixel-ratio: 2)",
+        "screen and (-o-min-device-pixel-ratio: 2/1)",
+        "screen and (min-device-pixel-ratio: 2)",
+        "screen and (min-resolution: 192dpi)",
+        "screen and (min-resolution: 2dppx)";
+    } @else {
+      @return $input;
+    }
+  }
+  @if $view {
+    @return $view;
+  } @else if $orientation {
+    @return "screen and (orientation: #{$orientation})";
+  } @else {
+    @if $range == "max" {
+      @if $dim == "height" {
+        @return "(max-height: #{$break})";
+      } @else {
+        @return "(max-width: #{$break})";
+      }
+    } @else {
+      @if $dim == "height" {
+        @return "(min-height: #{$break})";
+      } @else {
+        @return "(min-width: #{$break})";
+      }
+    }
+  }
+}
+@mixin break($input: null) {
+  @media #{break($input)} {
+    @content;
+  }
+}
+@mixin show($input: null) {
+  @media #{break($input)} {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+@mixin hide($input: null) {
+  @media #{break($input)} {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@mixin flex($input: null) {
+  // display
+  $inline: false;
+  $row: true;
+  $wrap: true;
+  $reverse: false;
+  // alignment
+  $align: [left top top];
+  $x: start;
+  $y: start;
+  $iy: stretch;
+  $display: null;
+  $flexDirection: null;
+  $justifyContent: null;
+  $alignItems: null;
+  $alignContent: null;
+  // box pattern
+  $boxes: 1;
+  // lists
+  $flex: ();
+  $boxes: ();
+  $i: 0;
+
+  // Assign inputs
+  @each $item in $input {
+    @if is-list($item) and is-bracketed($item) {
+      $align: $item;
+    } @else if is-list($item) or is-number($item) {
+      $boxes: append($boxes, $item);
+    } @else {
+      $flex: append($flex, $item);
+    }
+  }
+
+  // Handle flex display
+  @if length($flex) >= 1 {
+    @each $item in $flex {
+      @if $item == "inline" {
+        $inline: true;
+      } @else if $item == "block" {
+        $inline: false;
+      } @else if $item == "col" or $item == "column" {
+        $row: false;
+      } @else if $item == "row" {
+        $row: true;
+      } @else if $item == "wrap" {
+        $wrap: true;
+      } @else if $item == "nowrap" {
+        $wrap: false;
+      } @else if $item == "reverse" {
+        $reverse: true;
+      } @else {
+        @warn "Flex keyword not recognized: #{$item}";
+      }
+    }
+  }
+
+  // Handle flex alignment
+  @if length($align) >= 1 {
+    $x: nth($align, 1);
+  }
+  @if length($align) >= 2 {
+    $y: nth($align, 2);
+  }
+  @if length($align) >= 3 {
+    $iy: nth($align, 3);
+  }
+  @if length($align) >= 4 {
+    @warn "Flex alignment should have three inputs maximum (x y iy): #{$align}";
+  }
+
+  @if $row == true {
+    @if $x == "start" or $x == "left" {
+      $justifyContent: flex-start;
+    } @else if $x == "end" or $x == "right" {
+      $justifyContent: flex-end;
+    } @else if $x == "center" or $x == "middle" {
+      $justifyContent: center;
+    } @else if $x == "between" {
+      $justifyContent: space-between;
+    } @else if $x == "around" {
+      $justifyContent: space-around;
+    } @else if $x == "even" or $x == "evenly" {
+      $justifyContent: space-evenly;
+    }
+
+    @if $y == "start" or $y == "top" {
+      $alignItems: flex-start;
+    } @else if $y == "end" or $y == "bottom" {
+      $alignItems: flex-end;
+    } @else if $y == "center" or $y == "middle" {
+      $alignItems: center;
+    } @else if $y == "baseline" {
+      $alignItems: baseline;
+    } @else if $y == "stretch" {
+      $alignItems: stretch;
+    }
+
+    @if $iy == "start" or $iy == "top" {
+      $alignContent: flex-start;
+    } @else if $iy == "end" or $iy == "bottom" {
+      $alignContent: flex-end;
+    } @else if $iy == "center" or $iy == "middle" {
+      $alignContent: center;
+    } @else if $iy == "between" {
+      $alignContent: space-between;
+    } @else if $iy == "around" {
+      $alignContent: space-around;
+    } @else if $iy == "stretch" {
+      $alignContent: stretch;
+    }
+  } @else {
+    @if $x == "start" or $x == "left" {
+      $alignItems: flex-start;
+    } @else if $x == "end" or $x == "right" {
+      $alignItems: flex-end;
+    } @else if $x == "center" or $x == "middle" {
+      $alignItems: center;
+    } @else if $x == "baseline" {
+      $alignItems: baseline;
+    } @else if $x == "stretch" {
+      $alignItems: stretch;
+    }
+
+    @if $y == "start" or $y == "top" {
+      $justifyContent: flex-start;
+    } @else if $y == "end" or $y == "bottom" {
+      $justifyContent: flex-end;
+    } @else if $y == "center" or $y == "middle" {
+      $justifyContent: center;
+    } @else if $y == "between" {
+      $justifyContent: space-between;
+    } @else if $y == "around" {
+      $justifyContent: space-around;
+    } @else if $y == "even" or $y == "evenly" {
+      $justifyContent: space-evenly;
+    }
+
+    @if $iy == "start" or $iy == "left" {
+      $alignContent: flex-start;
+    } @else if $iy == "end" or $iy == "right" {
+      $alignContent: flex-end;
+    } @else if $iy == "center" or $iy == "middle" {
+      $alignContent: center;
+    } @else if $iy == "between" {
+      $alignContent: space-between;
+    } @else if $iy == "around" {
+      $alignContent: space-around;
+    } @else if $iy == "stretch" {
+      $alignContent: stretch;
+    }
+  }
+
+  $count: length($boxes);
+  @each $item in $boxes {
+    $i: $i + 1;
+    & > *:nth-child(#{$count}n + #{$i}) {
+      @if is-percent($item) {
+        flex: 1 0 #{$item};
+      } @else if is-number($item) and unitless($item) {
+        @if $item <= 10 {
+          flex: #{$item} 0 auto;
+        } @else {
+          flex: 1 0 its($item);
+        }
+      } @else if is-number($item) {
+        flex: 1 0 #{$item};
+      } @else if is-list($item) {
+        flex: #{$item};
+      }
+    }
+  }
+
+  @if $inline == true {
+    display: inline-flex;
+  } @else {
+    display: flex;
+  }
+
+  @if $reverse == true {
+    @if $row == false {
+      flex-direction: column-reverse;
+    } @else {
+      flex-direction: row-reverse;
+    }
+  } @else {
+    @if $row == false {
+      flex-direction: column;
+    } @else {
+      flex-direction: row;
+    }
+  }
+
+  @if $wrap == false {
+    flex-wrap: nowrap;
+  } @else {
+    @if $reverse == true {
+      flex-wrap: wrap-reverse;
+    } @else {
+      flex-wrap: wrap;
+    }
+  }
+  justify-content: #{$justifyContent};
+  align-items: #{$alignItems};
+  align-content: #{$alignContent};
+}
+
+@mixin hover($input: smart) {
+  @if $input == "only" {
+    @include break(desktop) {
+      &:hover {
+        @content;
+      }
+    }
+  } @else if $input == "smart" {
+    @include break(desktop) {
+      &:hover {
+        @content;
+      }
+    }
+    &:active {
+      transition: none;
+      @content;
+    }
+  } @else {
+    @warn "Invalid input for hover().  Valid inputs: only, active (default)";
+  }
+}

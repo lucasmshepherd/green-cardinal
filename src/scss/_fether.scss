@@ -1,0 +1,21 @@
+// initiate
+$fether: ();
+
+// functions
+@import "_partials/_functions/value";
+@import "_partials/_functions/input";
+
+// settings
+@import "_partials/_settings/defaults";
+@import "_partials/_settings/layout";
+@import "_partials/_settings/palette";
+@import "_partials/_settings/typography";
+
+// theme
+@import "_partials/_settings/theme";
+
+// funmix
+@import "_partials/_funmix/font";
+@import "_partials/_funmix/color";
+@import "_partials/_funmix/shadows";
+@import "_partials/_funmix/frame";
